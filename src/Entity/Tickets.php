@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\TicketsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TicketsRepository::class)]
 class Tickets
@@ -14,6 +16,7 @@ class Tickets
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Email]
     #[ORM\Column(length: 255)]
     private ?string $auteur = null;
 
@@ -23,6 +26,7 @@ class Tickets
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $closedAt = null;
 
+    #[Assert\Length(min: 50, max: 500)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -30,10 +34,15 @@ class Tickets
     private ?string $categorie = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $statut = null;
+    private ?string $statut = 'Nouveau';
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $responsable = null;
+    private ?string $responsable = 'A définir';
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now');
+    }
 
     public function getId(): ?int
     {
