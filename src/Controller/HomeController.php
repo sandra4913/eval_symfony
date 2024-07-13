@@ -18,7 +18,7 @@ class HomeController extends AbstractController
         $tickets = new Tickets();
         $form = $this->createForm(TicketsType::class, $tickets);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($tickets);
             $manager->flush();
             return $this->redirectToRoute(route: 'app_home');
